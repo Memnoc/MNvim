@@ -228,7 +228,10 @@ return {
 	opts = {
 		bigfile = { enabled = true },
 		explorer = { enabled = true, replace_netrw = true },
-		indent = { enabled = true },
+		indent = {
+			enabled = true,
+			char = "│",
+		},
 		input = { enabled = true },
 		notifier = { enabled = true },
 		picker = { enabled = true },

@@ -67,3 +67,6 @@ vim.opt.confirm = true
 
 -- Preview substitutions live
 vim.opt.inccommand = "split"
+
+-- Disable folding
+vim.opt.foldenable = false
