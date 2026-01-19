@@ -13,6 +13,9 @@ return {
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
 		local keymap = vim.keymap
 
+		-- Track virtual text state
+		local virtual_text_enabled = true
+
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
 			callback = function(ev)
@@ -56,6 +59,17 @@ return {
 
 				opts.desc = "Restart LSP"
 				keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
+
+				-- Toggle all diagnostics
+				keymap.set("n", "<leader>td", function()
+					vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+				end, { buffer = ev.buf, desc = "Toggle diagnostics" })
+
+				-- Toggle virtual text only (keeps gutter signs)
+				keymap.set("n", "<leader>tv", function()
+					virtual_text_enabled = not virtual_text_enabled
+					vim.diagnostic.config({ virtual_text = virtual_text_enabled })
+				end, { buffer = ev.buf, desc = "Toggle diagnostic virtual text" })
 
 				-- Toggle inlay hints
 				local client = vim.lsp.get_client_by_id(ev.data.client_id)
