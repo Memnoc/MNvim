@@ -35,15 +35,12 @@ opt.signcolumn = "yes" -- show sign column so that text does not shift
 -- backspace
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
-
 -- clipboard
 opt.clipboard:append("unnamedplus") -- use system clipboard as default register
-
 
 -- split windows
 opt.splitright = true -- split vertical window to the right
 opt.splitbelow = true -- spit horizonatal window at the bootom
-
 
 -- turn off swapfile
 opt.swapfile = false
@@ -51,3 +48,22 @@ opt.swapfile = false
 -- startofline
 opt.startofline = false
 opt.virtualedit = "block"
+
+-- Persistent undo
+vim.opt.undofile = true
+
+-- Faster CursorHold (for document highlight)
+vim.opt.updatetime = 250
+
+-- Keep context around cursor
+vim.opt.scrolloff = 10
+
+-- Ask before unsaved quit
+vim.opt.confirm = true
+
+-- Show whitespace characters
+-- vim.opt.list = true
+-- vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+
+-- Preview substitutions live
+vim.opt.inccommand = "split"

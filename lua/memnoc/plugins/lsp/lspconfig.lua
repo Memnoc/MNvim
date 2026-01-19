@@ -14,7 +14,7 @@ return {
 		local keymap = vim.keymap
 
 		vim.api.nvim_create_autocmd("LspAttach", {
-			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+			group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
 			callback = function(ev)
 				local opts = { buffer = ev.buf, silent = true }
 
@@ -56,24 +56,62 @@ return {
 
 				opts.desc = "Restart LSP"
 				keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
+
+				-- Toggle inlay hints
+				local client = vim.lsp.get_client_by_id(ev.data.client_id)
+				if client and client.supports_method("textDocument/inlayHint") then
+					keymap.set("n", "<leader>th", function()
+						vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }))
+					end, { buffer = ev.buf, desc = "Toggle inlay hints" })
+				end
+
+				-- Document highlight on CursorHold
+				if client and client.supports_method("textDocument/documentHighlight") then
+					local highlight_augroup = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
+
+					vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+						buffer = ev.buf,
+						group = highlight_augroup,
+						callback = vim.lsp.buf.document_highlight,
+					})
+
+					vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+						buffer = ev.buf,
+						group = highlight_augroup,
+						callback = vim.lsp.buf.clear_references,
+					})
+
+					vim.api.nvim_create_autocmd("LspDetach", {
+						group = vim.api.nvim_create_augroup("lsp-detach", { clear = true }),
+						callback = function(ev2)
+							vim.lsp.buf.clear_references()
+							vim.api.nvim_clear_autocmds({ group = "lsp-highlight", buffer = ev2.buf })
+						end,
+					})
+				end
 			end,
 		})
 
 		local capabilities = cmp_nvim_lsp.default_capabilities()
 
-		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+		-- Diagnostic signs
+		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
 		for type, icon in pairs(signs) do
 			local hl = "DiagnosticSign" .. type
 			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 		end
 
-		-- adding diagnostics on screen
+		-- Diagnostic config
 		vim.diagnostic.config({
 			virtual_text = true,
 			signs = true,
 			underline = true,
 			update_in_insert = false,
 			severity_sort = true,
+			float = {
+				border = "rounded",
+				source = "if_many",
+			},
 		})
 
 		require("mason-lspconfig").setup({
