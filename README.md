@@ -2,7 +2,7 @@
 
 My Neovim config. Built from scratch to understand every piece.
 
-## What's in it
+## What I use (mostly)
 
 - **Plugin manager**: lazy.nvim
 - **Theme**: TokyoNight Night
