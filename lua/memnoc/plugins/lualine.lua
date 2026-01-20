@@ -15,6 +15,7 @@ return {
 			yellow = "#e0af68",
 			fg = "#c0caf5",
 			bg = "#1a1b26",
+			surface = "#24283b",
 			inactive_bg = "#16161e",
 			inactive_fg = "#565f89",
 		}
@@ -22,27 +23,27 @@ return {
 		local my_lualine_theme = {
 			normal = {
 				a = { bg = colors.blue, fg = colors.bg, gui = "bold" },
-				b = { bg = colors.bg, fg = colors.fg },
+				b = { bg = colors.surface, fg = colors.fg },
 				c = { bg = colors.bg, fg = colors.fg },
 			},
 			insert = {
 				a = { bg = colors.green, fg = colors.bg, gui = "bold" },
-				b = { bg = colors.bg, fg = colors.fg },
+				b = { bg = colors.surface, fg = colors.fg },
 				c = { bg = colors.bg, fg = colors.fg },
 			},
 			visual = {
 				a = { bg = colors.magenta, fg = colors.bg, gui = "bold" },
-				b = { bg = colors.bg, fg = colors.fg },
+				b = { bg = colors.surface, fg = colors.fg },
 				c = { bg = colors.bg, fg = colors.fg },
 			},
 			command = {
 				a = { bg = colors.yellow, fg = colors.bg, gui = "bold" },
-				b = { bg = colors.bg, fg = colors.fg },
+				b = { bg = colors.surface, fg = colors.fg },
 				c = { bg = colors.bg, fg = colors.fg },
 			},
 			replace = {
 				a = { bg = colors.red, fg = colors.bg, gui = "bold" },
-				b = { bg = colors.bg, fg = colors.fg },
+				b = { bg = colors.surface, fg = colors.fg },
 				c = { bg = colors.bg, fg = colors.fg },
 			},
 			inactive = {
@@ -61,6 +62,13 @@ return {
 				globalstatus = true,
 			},
 			sections = {
+				lualine_a = { "mode" },
+				lualine_b = {
+					{ "branch", color = { fg = colors.magenta, gui = "bold" } },
+				},
+				lualine_c = {
+					{ "filename", color = { fg = colors.cyan } },
+				},
 				lualine_x = {
 					{
 						lazy_status.updates,
@@ -71,6 +79,8 @@ return {
 					{ "fileformat" },
 					{ "filetype" },
 				},
+				lualine_y = { "progress" },
+				lualine_z = { "location" },
 			},
 		})
 	end,
