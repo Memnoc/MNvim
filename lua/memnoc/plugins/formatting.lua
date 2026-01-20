@@ -1,53 +1,61 @@
 return {
-  "stevearc/conform.nvim",
-  event = { "BufReadPre", "BufNewFile" },
-  config = function()
-    local conform = require("conform")
+	"stevearc/conform.nvim",
+	event = { "BufReadPre", "BufNewFile" },
+	config = function()
+		local conform = require("conform")
 
-    conform.setup({
-      formatters_by_ft = {
-        -- C
-        c = { "clang-format" },
-        cpp = { "clang-format" },
+		-- Track format on save state
+		vim.g.format_on_save_enabled = true
 
-        -- Rust
-        rust = { "rustfmt" },
+		conform.setup({
+			formatters_by_ft = {
+				c = { "clang-format" },
+				cpp = { "clang-format" },
+				rust = { "rustfmt" },
+				javascript = { "prettier" },
+				typescript = { "prettier" },
+				javascriptreact = { "prettier" },
+				typescriptreact = { "prettier" },
+				svelte = { "prettier" },
+				css = { "prettier" },
+				html = { "prettier" },
+				json = { "prettier" },
+				yaml = { "prettier" },
+				markdown = { "prettier" },
+				graphql = { "prettier" },
+				liquid = { "prettier" },
+				lua = { "stylua" },
+				python = { "isort", "black" },
+			},
+			format_on_save = function()
+				if not vim.g.format_on_save_enabled then
+					return nil
+				end
+				return {
+					lsp_fallback = true,
+					async = false,
+					timeout_ms = 1000,
+				}
+			end,
+		})
 
-        -- TypeScript / React
-        javascript = { "prettier" },
-        typescript = { "prettier" },
-        javascriptreact = { "prettier" },
-        typescriptreact = { "prettier" },
+		-- Manual format if needed
+		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
+			conform.format({
+				lsp_fallback = true,
+				async = false,
+				timeout_ms = 1000,
+			})
+		end, { desc = "Format file or range" })
 
-        -- Web
-        svelte = { "prettier" },
-        css = { "prettier" },
-        html = { "prettier" },
-        json = { "prettier" },
-        yaml = { "prettier" },
-        markdown = { "prettier" },
-        graphql = { "prettier" },
-        liquid = { "prettier" },
-
-        -- Lua
-        lua = { "stylua" },
-
-        -- Python
-        python = { "isort", "black" },
-      },
-      format_on_save = {
-        lsp_fallback = true,
-        async = false,
-        timeout_ms = 1000,
-      },
-    })
-
-    vim.keymap.set({ "n", "v" }, "<leader>mp", function()
-      conform.format({
-        lsp_fallback = true,
-        async = false,
-        timeout_ms = 1000,
-      })
-    end, { desc = "Format file or range (in visual mode)" })
-  end,
+		-- Toggle format on save
+		vim.keymap.set("n", "<leader>tf", function()
+			vim.g.format_on_save_enabled = not vim.g.format_on_save_enabled
+			if vim.g.format_on_save_enabled then
+				vim.notify("Format on save enabled", vim.log.levels.INFO)
+			else
+				vim.notify("Format on save disabled", vim.log.levels.INFO)
+			end
+		end, { desc = "Toggle format on save" })
+	end,
 }
