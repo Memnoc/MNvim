@@ -65,7 +65,10 @@ return {
 			-- CODE
 			-- =====================
 			{ "<leader>ca", icon = "󰌵" },
-
+			{ "<leader>cf", icon = "󰉼" },
+			{ "<leader>ci", icon = "󰏷" },
+			{ "<leader>co", icon = "󰏻" },
+			{ "<leader>cs", icon = "󰒓" },
 			-- =====================
 			-- FILE/FIND
 			-- =====================

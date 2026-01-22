@@ -74,6 +74,48 @@ return {
 					vim.diagnostic.config({ virtual_text = virtual_text_enabled })
 				end, { buffer = ev.buf, desc = "Toggle virtual text" })
 
+				-- Format
+				keymap.set("n", "<leader>cf", function()
+					vim.lsp.buf.format({ async = true })
+				end, { buffer = ev.buf, desc = "Format buffer" })
+				keymap.set("v", "<leader>cf", function()
+					vim.lsp.buf.format({ async = true })
+				end, { buffer = ev.buf, desc = "Format selection" })
+
+				-- Signature help
+				keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { buffer = ev.buf, desc = "Signature help" })
+
+				-- Incoming/outgoing calls
+				keymap.set("n", "<leader>ci", vim.lsp.buf.incoming_calls, { buffer = ev.buf, desc = "Incoming calls" })
+				keymap.set("n", "<leader>co", vim.lsp.buf.outgoing_calls, { buffer = ev.buf, desc = "Outgoing calls" })
+
+				-- Workspace folders
+				keymap.set(
+					"n",
+					"<leader>wa",
+					vim.lsp.buf.add_workspace_folder,
+					{ buffer = ev.buf, desc = "Add workspace folder" }
+				)
+				keymap.set(
+					"n",
+					"<leader>wr",
+					vim.lsp.buf.remove_workspace_folder,
+					{ buffer = ev.buf, desc = "Remove workspace folder" }
+				)
+				keymap.set("n", "<leader>wl", function()
+					print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+				end, { buffer = ev.buf, desc = "List workspace folders" })
+
+				-- Quick fix at cursor
+				keymap.set("n", "<leader>qf", function()
+					vim.lsp.buf.code_action({ context = { only = { "quickfix" } }, apply = true })
+				end, { buffer = ev.buf, desc = "Quick fix" })
+
+				-- Source action (organize imports, etc.)
+				keymap.set("n", "<leader>cs", function()
+					vim.lsp.buf.code_action({ context = { only = { "source" } }, apply = true })
+				end, { buffer = ev.buf, desc = "Source action" })
+
 				-- Register icons with which-key
 				local wk_ok, wk = pcall(require, "which-key")
 				if wk_ok then
