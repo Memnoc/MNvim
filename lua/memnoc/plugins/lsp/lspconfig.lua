@@ -20,40 +20,76 @@ return {
 			callback = function(ev)
 				local opts = { buffer = ev.buf, silent = true }
 
-				opts.desc = "Go to declaration"
-				keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+				-- Set keymaps
+				keymap.set(
+					"n",
+					"gD",
+					vim.lsp.buf.declaration,
+					vim.tbl_extend("force", opts, { desc = "Go to declaration" })
+				)
+				keymap.set(
+					{ "n", "v" },
+					"<leader>ca",
+					vim.lsp.buf.code_action,
+					vim.tbl_extend("force", opts, { desc = "Code actions" })
+				)
+				keymap.set(
+					"n",
+					"<leader>rn",
+					vim.lsp.buf.rename,
+					vim.tbl_extend("force", opts, { desc = "Rename symbol" })
+				)
+				keymap.set(
+					"n",
+					"<leader>d",
+					vim.diagnostic.open_float,
+					vim.tbl_extend("force", opts, { desc = "Line diagnostics" })
+				)
+				keymap.set(
+					"n",
+					"[d",
+					vim.diagnostic.goto_prev,
+					vim.tbl_extend("force", opts, { desc = "Prev diagnostic" })
+				)
+				keymap.set(
+					"n",
+					"]d",
+					vim.diagnostic.goto_next,
+					vim.tbl_extend("force", opts, { desc = "Next diagnostic" })
+				)
+				keymap.set("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover docs" }))
+				keymap.set(
+					"n",
+					"<leader>rs",
+					":LspRestart<CR>",
+					vim.tbl_extend("force", opts, { desc = "Restart LSP" })
+				)
 
-				opts.desc = "See available code actions"
-				keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
-
-				opts.desc = "Smart rename"
-				keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-
-				opts.desc = "Show line diagnostics"
-				keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
-
-				opts.desc = "Go to previous diagnostic"
-				keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-
-				opts.desc = "Go to next diagnostic"
-				keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-
-				opts.desc = "Show documentation for what is under cursor"
-				keymap.set("n", "K", vim.lsp.buf.hover, opts)
-
-				opts.desc = "Restart LSP"
-				keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
-
-				-- Toggle all diagnostics
 				keymap.set("n", "<leader>td", function()
 					vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 				end, { buffer = ev.buf, desc = "Toggle diagnostics" })
 
-				-- Toggle virtual text only
 				keymap.set("n", "<leader>tv", function()
 					virtual_text_enabled = not virtual_text_enabled
 					vim.diagnostic.config({ virtual_text = virtual_text_enabled })
-				end, { buffer = ev.buf, desc = "Toggle diagnostic virtual text" })
+				end, { buffer = ev.buf, desc = "Toggle virtual text" })
+
+				-- Register icons with which-key
+				local wk_ok, wk = pcall(require, "which-key")
+				if wk_ok then
+					wk.add({
+						{ "gD", buffer = ev.buf, icon = "󰈮" },
+						{ "<leader>ca", buffer = ev.buf, icon = "󰌵" },
+						{ "<leader>rn", buffer = ev.buf, icon = "󰑕" },
+						{ "<leader>d", buffer = ev.buf, icon = "󰨮" },
+						{ "[d", buffer = ev.buf, icon = "󰒮" },
+						{ "]d", buffer = ev.buf, icon = "󰒭" },
+						{ "K", buffer = ev.buf, icon = "󰘥" },
+						{ "<leader>rs", buffer = ev.buf, icon = "󰑓" },
+						{ "<leader>td", buffer = ev.buf, icon = "󰨚" },
+						{ "<leader>tv", buffer = ev.buf, icon = "󰨚" },
+					})
+				end
 
 				-- Toggle inlay hints
 				local client = vim.lsp.get_client_by_id(ev.data.client_id)
@@ -61,6 +97,9 @@ return {
 					keymap.set("n", "<leader>th", function()
 						vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }))
 					end, { buffer = ev.buf, desc = "Toggle inlay hints" })
+					if wk_ok then
+						wk.add({ { "<leader>th", buffer = ev.buf, icon = "󰗧" } })
+					end
 				end
 
 				-- Document highlight on CursorHold

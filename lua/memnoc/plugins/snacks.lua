@@ -127,6 +127,13 @@ return {
 			end,
 			desc = "Buffer Lines",
 		},
+		{
+			"<leader>sn",
+			function()
+				require("noice").cmd("history")
+			end,
+			desc = "Noice History",
+		},
 
 		-- Git
 		{
@@ -165,7 +172,7 @@ return {
 			desc = "Git Branches",
 		},
 
-		-- LSP (also mapped in lspconfig, but available globally)
+		-- LSP
 		{
 			"gd",
 			function()
@@ -195,7 +202,7 @@ return {
 			desc = "Type Definitions",
 		},
 
-		-- Other
+		-- Notifications
 		{
 			"<leader>un",
 			function()
@@ -210,6 +217,8 @@ return {
 			end,
 			desc = "Notification History",
 		},
+
+		-- Word navigation
 		{
 			"]]",
 			function()

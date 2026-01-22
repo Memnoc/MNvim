@@ -6,13 +6,6 @@ return {
 	},
 	keys = {
 		{
-			"<leader>sn",
-			function()
-				require("noice").cmd("history")
-			end,
-			desc = "Noice History",
-		},
-		{
 			"<leader>na",
 			function()
 				require("noice").cmd("all")

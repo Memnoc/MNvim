@@ -4,7 +4,7 @@ return {
 		ft = "markdown",
 		build = ":call mkdp#util#install()",
 		keys = {
-			{ "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>", desc = "Markdown Preview Toggle", ft = "markdown" },
+			{ "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>", desc = "Preview Toggle", ft = "markdown" },
 		},
 	},
 }
