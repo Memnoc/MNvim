@@ -4,19 +4,35 @@ vim.g.mapleader = " "
 -- global variable
 local map = vim.keymap.set
 
--- vertical block selection
+---------------------
+-- Visual
+---------------------
 map("n", "<leader>vb", "<C-v>G", { desc = "Block select to EOF" })
 
--- window management
-map("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" }) -- make splits equal size
-map("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" }) -- close the active split
+---------------------
+-- Window management
+---------------------
+map("n", "<leader>we", "<C-w>=", { desc = "Equal size" })
+map("n", "<leader>wx", "<cmd>close<CR>", { desc = "Close split" })
+map("n", "<leader>wd", "<C-W>c", { desc = "Delete window" })
+map("n", "<leader>wm", "<cmd>MaximizerToggle<CR>", { desc = "Maximize toggle" })
+map("n", "<leader>|", "<C-W>s", { desc = "Split below" })
+map("n", "<leader>-", "<C-W>v", { desc = "Split right" })
 
--- Force quit without saving
+---------------------
+-- Quit/Session
+---------------------
 map("n", "<leader>qQ", "<cmd>qa!<CR>", { desc = "Quit without saving" })
+map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
 
--- Exit terminal mode
+---------------------
+-- Terminal
+---------------------
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
+---------------------
+-- Movement (no leader)
+---------------------
 -- Better up/down (handles wrapped lines)
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -43,34 +59,19 @@ map("i", "<A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
 map("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
 map("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
--- Buffers - defined in bufferline.lua
--- map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
--- map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
--- map("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
--- map("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
--- map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
--- map("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
--- map("n", "<leader>bd", function()
--- 	require("snacks").bufdelete()
--- end, { desc = "Delete Buffer" })
--- map("n", "<leader>bo", function()
--- 	require("snacks").bufdelete.other()
--- end, { desc = "Delete Other Buffers" })
-map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete Buffer and Window" })
+---------------------
+-- Buffer
+---------------------
+map("n", "<leader>bD", "<cmd>:bd<cr>", { desc = "Delete buffer and window" })
 
+---------------------
+-- Search/Clear
+---------------------
 -- Clear search on escape
 map({ "i", "n", "s" }, "<esc>", function()
 	vim.cmd("noh")
 	return "<esc>"
 end, { expr = true, desc = "Escape and Clear hlsearch" })
-
--- Clear search, diff update and redraw
-map(
-	"n",
-	"<leader>ur",
-	"<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>",
-	{ desc = "Redraw / Clear hlsearch / Diff Update" }
-)
 
 -- Saner behavior of n and N
 map("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next Search Result" })
@@ -80,6 +81,15 @@ map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev Search R
 map("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
 map("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
 
+---------------------
+-- UI
+---------------------
+map("n", "<leader>ur", "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>", { desc = "Redraw / Clear hlsearch" })
+map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
+
+---------------------
+-- Editing helpers (no leader)
+---------------------
 -- Add undo break-points
 map("i", ",", ",<c-g>u")
 map("i", ".", ".<c-g>u")
@@ -87,9 +97,6 @@ map("i", ";", ";<c-g>u")
 
 -- Save file
 map({ "n", "i", "v" }, "<C-s>", "<Esc><cmd>w<cr>", { desc = "Save File" })
-
--- Keywordprg
-map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
 
 -- Better indenting
 map("x", "<", "<gv")
@@ -99,19 +106,20 @@ map("x", ">", ">gv")
 map("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
 map("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
 
--- Lazy
+---------------------
+-- Misc leader keys
+---------------------
 map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
+map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
 
--- New file
+---------------------
+-- File
+---------------------
 map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 
--- Quit
-map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
-
--- Inspect
-map("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
-
+---------------------
 -- Snacks Terminal
+---------------------
 map("n", "<leader>ft", function()
 	require("snacks").terminal()
 end, { desc = "Terminal" })
@@ -119,17 +127,3 @@ end, { desc = "Terminal" })
 map({ "n", "t" }, "<C-/>", function()
 	require("snacks").terminal.toggle()
 end, { desc = "Toggle Terminal" })
-
--- Windows
-map("n", "<leader>|", "<C-W>s", { desc = "Split Window Below", remap = true })
-map("n", "<leader>/", "<C-W>v", { desc = "Split Window Right", remap = true })
-map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
-
--- Tabs defined in bufferline
--- map("n", "<leader><tab>l", "<cmd>tablast<cr>", { desc = "Last Tab" })
--- map("n", "<leader><tab>o", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
--- map("n", "<leader><tab>f", "<cmd>tabfirst<cr>", { desc = "First Tab" })
--- map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
--- map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next Tab" })
--- map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close Tab" })
--- map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
