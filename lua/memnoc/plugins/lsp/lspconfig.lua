@@ -177,10 +177,10 @@ return {
 			virtual_text = true,
 			signs = {
 				text = {
-					[vim.diagnostic.severity.ERROR] = "✘",
-					[vim.diagnostic.severity.WARN] = "▲",
-					[vim.diagnostic.severity.HINT] = "⚑",
-					[vim.diagnostic.severity.INFO] = "»",
+					[vim.diagnostic.severity.ERROR] = "",
+					[vim.diagnostic.severity.WARN] = "",
+					[vim.diagnostic.severity.HINT] = "",
+					[vim.diagnostic.severity.INFO] = "",
 				},
 			},
 			underline = true,
@@ -212,6 +212,7 @@ return {
 				["clangd"] = function()
 					lspconfig["clangd"].setup({
 						capabilities = capabilities,
+						filetypes = { "c", "cpp", "objc", "objcpp" },
 						cmd = {
 							"clangd",
 							"--background-index",
@@ -221,7 +222,6 @@ return {
 							"--function-arg-placeholders",
 							"--fallback-style=llvm",
 						},
-						filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
 					})
 				end,
 

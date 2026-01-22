@@ -13,7 +13,7 @@ return {
 			svelte = { "eslint_d" },
 
 			-- C / C++
-			c = { "cpplint" },
+			-- c = { "cpplint" },
 			cpp = { "cpplint" },
 
 			-- Python
