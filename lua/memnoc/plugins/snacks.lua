@@ -243,7 +243,21 @@ return {
 		},
 		input = { enabled = true },
 		notifier = { enabled = true },
-		picker = { enabled = true },
+		picker = {
+			enabled = true,
+			win = {
+				input = {
+					keys = {
+						["<Tab>"] = { "focus_preview", mode = { "i", "n" } },
+					},
+				},
+				preview = {
+					keys = {
+						["<Tab>"] = { "focus_input", mode = { "n" } },
+					},
+				},
+			},
+		},
 		quickfile = { enabled = true },
 		scope = { enabled = true },
 		words = { enabled = true },
