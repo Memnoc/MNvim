@@ -1,6 +1,8 @@
 return {
 	"goolord/alpha-nvim",
 	event = "VimEnter",
+	enabled = true,
+	init = false,
 	config = function()
 		local alpha = require("alpha")
 		local dashboard = require("alpha.themes.dashboard")
@@ -23,6 +25,26 @@ return {
 		vim.api.nvim_set_hl(0, "AlphaButtons", { fg = colors.cyan })
 		vim.api.nvim_set_hl(0, "AlphaShortcut", { fg = colors.orange, bold = true })
 		vim.api.nvim_set_hl(0, "AlphaFooter", { fg = colors.comment, italic = true })
+
+		require("alpha").setup(dashboard.opts)
+
+		-- Dashboard open to any empty buffer
+		vim.api.nvim_create_autocmd("User", {
+			once = true,
+			pattern = "LazyVimStarted",
+			callback = function()
+				local stats = require("lazy").stats()
+				local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+				dashboard.section.footer.val = "⚡ Neovim loaded "
+					.. stats.loaded
+					.. "/"
+					.. stats.count
+					.. " plugins in "
+					.. ms
+					.. "ms"
+				pcall(vim.cmd.AlphaRedraw)
+			end,
+		})
 
 		-- Header
 		dashboard.section.header.val = {
@@ -64,13 +86,10 @@ return {
 		end
 
 		dashboard.section.buttons.val = {
-			button("e", "  New file", "<cmd>ene<CR>"),
-			button("f", "  Find file", "<cmd>Telescope find_files<CR>"),
-			button("r", "  Recent files", "<cmd>Telescope oldfiles<CR>"),
-			button("g", "  Find text", "<cmd>Telescope live_grep<CR>"),
-			button("c", "  Config", "<cmd>e $MYVIMRC<CR>"),
-			button("l", "󰒲  Lazy", "<cmd>Lazy<CR>"),
-			button("q", "  Quit", "<cmd>qa<CR>"),
+			button("e", " " .. "New file", "<cmd>ene<CR>"),
+			button("c", " " .. "Config", "<cmd>e $MYVIMRC<CR>"),
+			button("l", "󰒲 " .. "Lazy", "<cmd>Lazy<CR>"),
+			button("q", " " .. "Quit", "<cmd>qa<CR>"),
 		}
 
 		-- Footer
