@@ -1,6 +1,5 @@
 return {
-  "szw/vim-maximizer",
-  keys = {
-    { "<leader>sm", "<cmd>MaximizerToggle<CR>", desc = "Maximize/minimize a split" },
-  },
+	"szw/vim-maximizer",
+	cmd = "MaximizerToggle",
+	-- Keymap defined in keymaps.lua as <leader>wm
 }
