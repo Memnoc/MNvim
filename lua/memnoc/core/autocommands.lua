@@ -38,3 +38,11 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.keymap.set("n", "<leader>ct", "<cmd>!cargo test<CR>", { buffer = true, desc = "Cargo test" })
 	end,
 })
+
+-- Make the buffer separation line more visible
+vim.api.nvim_create_autocmd("ColorScheme", {
+	pattern = "*",
+	callback = function()
+		vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#ff9e64" })
+	end,
+})
